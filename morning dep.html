@@ -1,0 +1,161 @@
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Selamat Pagi Cinta 💖 dengan Kupu-kupu 3D</title>
+    <style>
+    body {
+        margin: 0; padding: 0;
+        background-color: #fff0f5;
+        font-family: 'Segoe UI', sans-serif;
+        text-align: center;
+        color: #d63384;
+        overflow: hidden;
+        perspective: 800px;
+        height: 100vh;
+        position: relative;
+    }
+    .container {
+        padding: 16px;
+        position: relative;
+        z-index: 10;
+    }
+    img {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 16px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+        font-size: 1.4em;
+        margin-top: 20px;
+        min-height: 80px;
+    }
+    audio {
+        display: none;
+    }
+    button#musicBtn {
+        background-color: #d63384;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 22px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 3px 6px rgba(214,51,132,0.5);
+        transition: background-color 0.3s ease;
+    }
+    button#musicBtn:hover {
+        background-color: #b2226b;
+    }
+    .butterfly {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        pointer-events: none;
+        will-change: transform;
+        opacity: 0.9;
+        filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+    }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <img src="pagi.jpg" alt="Gambar Romantis" />
+        <h1 id="typewriter"></h1>
+        <button id="musicBtn">Play Musik</button>
+        <audio id="musik" loop>
+        <source src="nina.mp3" type="audio/mpeg" />
+        Browser kamu tidak mendukung audio.
+        </audio>
+    </div>
+
+    <div id="butterflies-container"></div>
+
+    <script>
+    // Efek ketik
+    const text = "Selamat pagi, cintaku 💕 Semoga harimu seindah senyumanmu 🌞";
+    const el = document.getElementById("typewriter");
+    let i = 0;
+    function ketik() {
+    if(i < text.length){
+        el.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(ketik, 50);
+    }
+    }
+    ketik();
+
+    // Musik & tombol
+    const musik = document.getElementById("musik");
+    const musicBtn = document.getElementById("musicBtn");
+
+    musicBtn.addEventListener("click", () => {
+    if (musik.paused) {
+        musik.play();
+        musicBtn.textContent = "Pause Musik";
+    } else {
+        musik.pause();
+        musicBtn.textContent = "Play Musik";
+    }
+    });
+
+    // SVG Kupu-kupu (simple, elegan)
+    const butterflySVG = `
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="#d63384">
+    <g>
+        <path d="M32 2C27 12 16 24 16 32c0 8 10 10 16 10s16-2 16-10c0-8-11-20-16-30z"/>
+        <path d="M32 2C37 12 48 24 48 32c0 8-10 10-16 10s-16-2-16-10c0-8 11-20 16-30z" fill="#f06292"/>
+    </g>
+    </svg>`;
+
+    // Buat kupu-kupu 3D banyak
+    const container = document.getElementById("butterflies-container");
+    const numButterflies = 20;
+    const butterflies = [];
+
+    for(let n=0; n<numButterflies; n++){
+    const div = document.createElement('div');
+    div.className = 'butterfly';
+    div.innerHTML = butterflySVG;
+    container.appendChild(div);
+
+    butterflies.push({
+        el: div,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        z: Math.random() * 500 + 50,
+        angle: Math.random() * 360,
+        speed: 0.5 + Math.random(),
+        size: 0.5 + Math.random(),
+        rotationSpeed: (Math.random() - 0.5) * 2,
+    });
+    }
+
+    function animate(){
+    butterflies.forEach(b => {
+        b.angle += b.speed;
+        b.x += Math.sin(b.angle * 0.01) * 1.5;
+        b.y += Math.cos(b.angle * 0.01) * 1.2;
+
+        if(b.x > window.innerWidth + 60) b.x = -60;
+        if(b.x < -60) b.x = window.innerWidth + 60;
+        if(b.y > window.innerHeight + 60) b.y = -60;
+        if(b.y < -60) b.y = window.innerHeight + 60;
+
+        const scale = b.size * (500 / (b.z + 300));
+        b.el.style.transform =
+        `translate3d(${b.x}px, ${b.y}px, 0) ` +
+        `scale(${scale.toFixed(2)}) ` +
+        `rotateY(${b.angle.toFixed(0)}deg) ` +
+        `rotateZ(${(b.angle * 2).toFixed(0)}deg)`;
+        b.el.style.zIndex = Math.floor(1000 - b.z);
+    });
+    requestAnimationFrame(animate);
+    }
+    animate();
+    </script>
+    </body>
+    </html>

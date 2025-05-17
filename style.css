@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff0f5;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  color: #d63384;
+}
+
+.container {
+  padding: 20px;
+}
+
+img {
+  max-width: 90%;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  margin-top: 30px;
+}
+
+h1 {
+  font-size: 1.8em;
+  margin-top: 20px;
+  min-height: 80px;
+}
